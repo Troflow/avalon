@@ -70,3 +70,30 @@ func (av *Avalon) NumGoods() (int, error) {
 
 	return av.NumPlayers() - numEvils, nil
 }
+
+// PlayerExists checks the game's current players to see if a given nick is
+// already registered.
+func (av *Avalon) PlayerExists(nick string) bool {
+	for _, player := range av.Players {
+		if player == nick {
+			return true
+		}
+	}
+
+	return false
+}
+
+// AddPlayer attempts to add a new player to the list of players. Errors if the
+// player already exists or they are too many players.
+func (av *Avalon) AddPlayer(nick string) error {
+	if av.NumPlayers() >= 10 {
+		return errors.New("avalon: there are already 10 players")
+	}
+
+	if av.PlayerExists(nick) {
+		return errors.New("avalon: player already registered")
+	}
+
+	av.Players = append(av.Players, nick)
+	return nil
+}

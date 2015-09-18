@@ -127,3 +127,70 @@ func TestNumGoods(t *testing.T) {
 		}
 	}
 }
+
+func TestPlayerExists(t *testing.T) {
+	var tests = []struct {
+		players []string
+		search  string
+		want    bool
+	}{
+		{
+			nil,
+			"Justin",
+			false,
+		},
+		{
+			[]string{},
+			"Justin",
+			false,
+		},
+		{
+			[]string{"A", "B", "C", "D", "E", "F", "G", "H", "I"},
+			"Z",
+			false,
+		},
+		{
+			[]string{"A", "B", "C", "D", "E", "F", "G", "H", "I"},
+			"A",
+			true,
+		},
+	}
+
+	for _, test := range tests {
+		avalon := NewAvalon()
+		avalon.Players = test.players
+
+		res := avalon.PlayerExists(test.search)
+		if res != test.want {
+			t.Errorf("wanted %t, got %t", test.want, res)
+		}
+	}
+}
+
+func TestAddPlayer(t *testing.T) {
+	avalon := NewAvalon()
+
+	if avalon.NumPlayers() != 0 {
+		t.Errorf("expected 0 players, got %d", avalon.NumPlayers())
+	}
+
+	_ = avalon.AddPlayer("Justin")
+	if avalon.NumPlayers() != 1 {
+		t.Errorf("expected 1 players, got %d", avalon.NumPlayers())
+	}
+
+	if !avalon.PlayerExists("Justin") {
+		t.Errorf("expected true for PlayerExists, got false")
+	}
+
+	err := avalon.AddPlayer("Justin")
+	if err == nil {
+		t.Error("expected error, got no error")
+	}
+
+	avalon.Players = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
+	err = avalon.AddPlayer("Justin")
+	if err == nil {
+		t.Error("expected error, got no error")
+	}
+}
