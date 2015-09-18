@@ -6,6 +6,11 @@ import (
 	"errors"
 )
 
+var (
+	ErrPlayerExists   = errors.New("avalon: player is already in this game")
+	ErrTooManyPlayers = errors.New("avalon: there are already 10 players")
+)
+
 // | Players | Evils | Q1 | Q2 | Q3 | Q4 | Q5 |
 // |---------|-------|----|----|----|----|----|
 // |       5 |     2 |  2 |  3 |  2 |  3 |  3 |
@@ -87,11 +92,11 @@ func (av *Avalon) PlayerExists(nick string) bool {
 // player already exists or they are too many players.
 func (av *Avalon) AddPlayer(nick string) error {
 	if av.NumPlayers() >= 10 {
-		return errors.New("avalon: there are already 10 players")
+		return ErrTooManyPlayers
 	}
 
 	if av.PlayerExists(nick) {
-		return errors.New("avalon: player already registered")
+		return ErrPlayerExists
 	}
 
 	av.Players = append(av.Players, nick)
