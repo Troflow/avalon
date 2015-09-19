@@ -4,6 +4,7 @@ package avalon
 
 import (
 	"errors"
+	"strings"
 )
 
 var (
@@ -25,6 +26,9 @@ var (
 // Avalon represents underlying game state and facilitates changes to the game
 // as it progresses and win conditions.
 type Avalon struct {
+	// Meta information
+	EnabledOptions map[string]bool
+
 	// Players and their roles
 	Players  []string
 	Goods    []string
@@ -45,7 +49,8 @@ type Avalon struct {
 
 func NewAvalon() *Avalon {
 	return &Avalon{
-		Specials: make(map[string]string),
+		EnabledOptions: make(map[string]bool),
+		Specials:       make(map[string]string),
 	}
 }
 
@@ -101,4 +106,34 @@ func (av *Avalon) AddPlayer(nick string) error {
 
 	av.Players = append(av.Players, nick)
 	return nil
+}
+
+// ListEnabledOptions returns a human-readable list of all the config options
+// enabled for this game or a special message if there are none.
+// Example: "Lake, Mordred, Oberon"
+func (av *Avalon) ListEnabledOptions() string {
+	if len(av.EnabledOptions) == 0 {
+		return "No options are enabled"
+	}
+
+	var enabledList []string
+
+	for option, enabled := range av.EnabledOptions {
+		if enabled {
+			enabledList = append(enabledList, option)
+		}
+	}
+
+	return strings.Join(enabledList, ", ")
+}
+
+// EnableOptions makes a best-effort attempt to enable every option requested
+// and silently fails on options it cannot enable.
+func (av *Avalon) EnableOptions(options []string) {
+	for _, option := range options {
+		option := strings.ToLower(option)
+		if OptionExists(option) {
+			av.EnabledOptions[option] = true
+		}
+	}
 }

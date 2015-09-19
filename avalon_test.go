@@ -1,6 +1,8 @@
 package avalon
 
 import (
+	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -192,5 +194,79 @@ func TestAddPlayer(t *testing.T) {
 	err = avalon.AddPlayer("Justin")
 	if err == nil {
 		t.Error("expected error, got no error")
+	}
+}
+
+func TestListEnabledOptions(t *testing.T) {
+	tests := []struct {
+		options map[string]bool
+		wants   []string
+	}{
+		{
+			map[string]bool{"oberon": true},
+			[]string{"oberon"},
+		},
+		{
+			map[string]bool{},
+			[]string{"No options are enabled"},
+		},
+		{
+			map[string]bool{"mordred": true, "lake": true, "oberon": true},
+			[]string{"mordred", "lake", "oberon"},
+		},
+		{
+			map[string]bool{"mordred": true, "lake": true, "oberon": false},
+			[]string{"mordred", "lake"},
+		},
+	}
+
+	for _, test := range tests {
+		avalon := NewAvalon()
+		avalon.EnabledOptions = test.options
+		res := avalon.ListEnabledOptions()
+
+		for _, want := range test.wants {
+			if !strings.Contains(res, want) {
+				t.Errorf("expected %s, but was absent from %s", want, res)
+			}
+		}
+	}
+}
+
+func TestEnableOptions(t *testing.T) {
+	tests := []struct {
+		enabled map[string]bool
+		options []string
+		want    map[string]bool
+	}{
+		{
+			map[string]bool{},
+			[]string{"mordred"},
+			map[string]bool{"mordred": true},
+		},
+		{
+			map[string]bool{"oberon": true},
+			[]string{"oberon"},
+			map[string]bool{"oberon": true},
+		},
+		{
+			map[string]bool{"oberon": true},
+			[]string{"dingleberry", "mordred"},
+			map[string]bool{"oberon": true, "mordred": true},
+		},
+		{
+			map[string]bool{"oberon": true},
+			[]string{"mordred", "lake"},
+			map[string]bool{"mordred": true, "oberon": true, "lake": true},
+		},
+	}
+
+	for _, test := range tests {
+		avalon := NewAvalon()
+		avalon.EnabledOptions = test.enabled
+		avalon.EnableOptions(test.options)
+		if !reflect.DeepEqual(avalon.EnabledOptions, test.want) {
+			t.Errorf("expected %v, got %v", test.want, avalon.EnabledOptions)
+		}
 	}
 }
