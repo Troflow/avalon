@@ -208,7 +208,7 @@ func TestListEnabledOptions(t *testing.T) {
 		},
 		{
 			map[string]bool{},
-			[]string{"No options are enabled"},
+			[]string{"none"},
 		},
 		{
 			map[string]bool{"mordred": true, "lake": true, "oberon": true},

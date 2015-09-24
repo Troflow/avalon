@@ -112,16 +112,16 @@ func (av *Avalon) AddPlayer(nick string) error {
 // enabled for this game or a special message if there are none.
 // Example: "Lake, Mordred, Oberon"
 func (av *Avalon) ListEnabledOptions() string {
-	if len(av.EnabledOptions) == 0 {
-		return "No options are enabled"
-	}
-
 	var enabledList []string
 
 	for option, enabled := range av.EnabledOptions {
 		if enabled {
 			enabledList = append(enabledList, option)
 		}
+	}
+
+	if len(enabledList) == 0 {
+		return "none"
 	}
 
 	return strings.Join(enabledList, ", ")
