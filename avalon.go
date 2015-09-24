@@ -48,10 +48,17 @@ type Avalon struct {
 }
 
 func NewAvalon() *Avalon {
-	return &Avalon{
+	av := &Avalon{
 		EnabledOptions: make(map[string]bool),
 		Specials:       make(map[string]string),
 	}
+
+	// Initialize the EnabledOptions with all options disabled
+	for _, option := range AvailableOptions {
+		av.EnabledOptions[option] = false
+	}
+
+	return av
 }
 
 // NumPlayers returns the number of players in the game.

@@ -19,7 +19,7 @@ var (
 		10: {3, 4, 4, 5, 5},
 	}
 
-	Options = []string{"lake", "mordred", "morganapercival", "oberon"}
+	AvailableOptions = []string{"lake", "mordred", "morganapercival", "oberon"}
 )
 
 const (
