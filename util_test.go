@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestOptionexists(t *testing.T) {
+func TestOptionExists(t *testing.T) {
 	var tests = []struct {
 		option string
 		want   bool
