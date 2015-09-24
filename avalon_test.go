@@ -73,10 +73,7 @@ func TestNumEvils(t *testing.T) {
 		avalon := NewAvalon()
 		avalon.Players = test.players
 
-		n, err := avalon.NumEvils()
-		if err != nil {
-			t.Errorf("wanted no error, got: %v", err)
-		}
+		n := avalon.NumEvils()
 
 		if n != test.want {
 			t.Errorf("wanted %d for %d players, got %d", test.want, avalon.NumPlayers(), n)
@@ -119,10 +116,7 @@ func TestNumGoods(t *testing.T) {
 		avalon := NewAvalon()
 		avalon.Players = test.players
 
-		n, err := avalon.NumGoods()
-		if err != nil {
-			t.Errorf("wanted no error, got: %v", err)
-		}
+		n := avalon.NumGoods()
 
 		if n != test.want {
 			t.Errorf("wanted %d for %d players, got %d", test.want, avalon.NumPlayers(), n)

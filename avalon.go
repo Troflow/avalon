@@ -68,24 +68,24 @@ func (av *Avalon) NumPlayers() int {
 
 // NumEvils returns the number of evil characters based on the total number of
 // players.
-func (av *Avalon) NumEvils() (int, error) {
+func (av *Avalon) NumEvils() int {
 	numEvils, ok := numPlayersToNumEvils[av.NumPlayers()]
 	if !ok {
-		return 0, errors.New("avalon: not enough players to determine evils")
+		return 0
 	}
 
-	return numEvils, nil
+	return numEvils
 }
 
 // NumGoods returns the number of good characters based on the total number of
 // players.
-func (av *Avalon) NumGoods() (int, error) {
-	numEvils, err := av.NumEvils()
-	if err != nil {
-		return 0, err
+func (av *Avalon) NumGoods() int {
+	numEvils := av.NumEvils()
+	if numEvils == 0 {
+		return 0
 	}
 
-	return av.NumPlayers() - numEvils, nil
+	return av.NumPlayers() - numEvils
 }
 
 // PlayerExists checks the game's current players to see if a given nick is
