@@ -151,7 +151,7 @@ func (av *Avalon) ListEnabledOptions() string {
 func (av *Avalon) EnableOptions(options []string) {
 	for _, option := range options {
 		option := strings.ToLower(option)
-		if OptionExists(option) && CanEnable(option, av) {
+		if OptionExists(option) {
 			av.EnabledOptions[option] = true
 		}
 	}
