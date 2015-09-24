@@ -144,3 +144,14 @@ func (av *Avalon) EnableOptions(options []string) {
 		}
 	}
 }
+
+// DisableOptions makes a best-effort attempt to disable every option requested
+// and silently fails on options it cannot disable.
+func (av *Avalon) DisableOptions(options []string) {
+	for _, option := range options {
+		option := strings.ToLower(option)
+		if OptionExists(option) {
+			av.EnabledOptions[option] = false
+		}
+	}
+}

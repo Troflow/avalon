@@ -259,12 +259,60 @@ func TestEnableOptions(t *testing.T) {
 			[]string{"mordred", "lake"},
 			map[string]bool{"mordred": true, "oberon": true, "lake": true},
 		},
+		{
+			map[string]bool{"oberon": false},
+			[]string{"mordred", "lake"},
+			map[string]bool{"mordred": true, "oberon": false, "lake": true},
+		},
+		{
+			map[string]bool{"oberon": false},
+			[]string{"oberon", "lake"},
+			map[string]bool{"oberon": true, "lake": true},
+		},
 	}
 
 	for _, test := range tests {
 		avalon := NewAvalon()
 		avalon.EnabledOptions = test.enabled
 		avalon.EnableOptions(test.options)
+		if !reflect.DeepEqual(avalon.EnabledOptions, test.want) {
+			t.Errorf("expected %v, got %v", test.want, avalon.EnabledOptions)
+		}
+	}
+}
+
+func TestDisableOptions(t *testing.T) {
+	tests := []struct {
+		enabled map[string]bool
+		options []string
+		want    map[string]bool
+	}{
+		{
+			map[string]bool{},
+			[]string{"mordred"},
+			map[string]bool{"mordred": false},
+		},
+		{
+			map[string]bool{"oberon": false},
+			[]string{"oberon"},
+			map[string]bool{"oberon": false},
+		},
+		{
+			map[string]bool{"oberon": true, "lake": false},
+			[]string{"dingleberry", "mordred"},
+			map[string]bool{"oberon": true, "mordred": false, "lake": false},
+		},
+		{
+			map[string]bool{"oberon": true},
+			[]string{"mordred", "lake"},
+			map[string]bool{"mordred": false, "oberon": true, "lake": false},
+		},
+	}
+
+	for _, test := range tests {
+		avalon := NewAvalon()
+		avalon.EnabledOptions = test.enabled
+		avalon.DisableOptions(test.options)
 		if !reflect.DeepEqual(avalon.EnabledOptions, test.want) {
 			t.Errorf("expected %v, got %v", test.want, avalon.EnabledOptions)
 		}
