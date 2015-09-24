@@ -267,6 +267,7 @@ func TestEnableOptions(t *testing.T) {
 
 	for _, test := range tests {
 		avalon := NewAvalon()
+		avalon.Players = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
 		avalon.EnabledOptions = test.enabled
 		avalon.EnableOptions(test.options)
 		if !reflect.DeepEqual(avalon.EnabledOptions, test.want) {
@@ -305,6 +306,7 @@ func TestDisableOptions(t *testing.T) {
 
 	for _, test := range tests {
 		avalon := NewAvalon()
+		avalon.Players = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
 		avalon.EnabledOptions = test.enabled
 		avalon.DisableOptions(test.options)
 		if !reflect.DeepEqual(avalon.EnabledOptions, test.want) {

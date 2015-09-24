@@ -88,6 +88,18 @@ func (av *Avalon) NumGoods() int {
 	return av.NumPlayers() - numEvils
 }
 
+// NumEvilSpecials returns the number of special evil characters enabled through
+// the options.
+func (av *Avalon) NumEvilSpecials() int {
+	var count int
+	for _, option := range []string{"mordred", "morganapercival", "oberon"} {
+		if av.EnabledOptions[option] {
+			count++
+		}
+	}
+	return count
+}
+
 // PlayerExists checks the game's current players to see if a given nick is
 // already registered.
 func (av *Avalon) PlayerExists(nick string) bool {
@@ -139,7 +151,7 @@ func (av *Avalon) ListEnabledOptions() string {
 func (av *Avalon) EnableOptions(options []string) {
 	for _, option := range options {
 		option := strings.ToLower(option)
-		if OptionExists(option) {
+		if OptionExists(option) && CanEnable(option, av) {
 			av.EnabledOptions[option] = true
 		}
 	}
