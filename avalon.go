@@ -25,9 +25,6 @@ var (
 // Avalon represents underlying game state and facilitates changes to the game
 // as it progresses and win conditions.
 type Avalon struct {
-	// Meta information
-	EnabledOptions map[string]bool
-
 	// Players and their roles
 	Players  []string
 	Goods    []string
@@ -48,13 +45,7 @@ type Avalon struct {
 
 func NewAvalon() *Avalon {
 	av := &Avalon{
-		EnabledOptions: make(map[string]bool),
-		Specials:       make(map[string]string),
-	}
-
-	// Initialize the EnabledOptions with all options disabled
-	for _, option := range AvailableOptions {
-		av.EnabledOptions[option] = false
+		Specials: make(map[string]string),
 	}
 
 	return av
