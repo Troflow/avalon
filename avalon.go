@@ -4,7 +4,6 @@ package avalon
 
 import (
 	"errors"
-	"strings"
 )
 
 var (
@@ -83,18 +82,6 @@ func (av *Avalon) NumGoods() int {
 	return av.NumPlayers() - numEvils
 }
 
-// NumEvilSpecials returns the number of special evil characters enabled through
-// the options.
-func (av *Avalon) NumEvilSpecials() int {
-	var count int
-	for _, option := range []string{"mordred", "morganapercival", "oberon"} {
-		if av.EnabledOptions[option] {
-			count++
-		}
-	}
-	return count
-}
-
 // PlayerExists checks the game's current players to see if a given nick is
 // already registered.
 func (av *Avalon) PlayerExists(nick string) bool {
@@ -120,45 +107,4 @@ func (av *Avalon) AddPlayer(nick string) error {
 
 	av.Players = append(av.Players, nick)
 	return nil
-}
-
-// ListEnabledOptions returns a human-readable list of all the config options
-// enabled for this game or a special message if there are none.
-// Example: "Lake, Mordred, Oberon"
-func (av *Avalon) ListEnabledOptions() string {
-	var enabledList []string
-
-	for option, enabled := range av.EnabledOptions {
-		if enabled {
-			enabledList = append(enabledList, option)
-		}
-	}
-
-	if len(enabledList) == 0 {
-		return "none"
-	}
-
-	return strings.Join(enabledList, ", ")
-}
-
-// EnableOptions makes a best-effort attempt to enable every option requested
-// and silently fails on options it cannot enable.
-func (av *Avalon) EnableOptions(options []string) {
-	for _, option := range options {
-		option := strings.ToLower(option)
-		if OptionExists(option) {
-			av.EnabledOptions[option] = true
-		}
-	}
-}
-
-// DisableOptions makes a best-effort attempt to disable every option requested
-// and silently fails on options it cannot disable.
-func (av *Avalon) DisableOptions(options []string) {
-	for _, option := range options {
-		option := strings.ToLower(option)
-		if OptionExists(option) {
-			av.EnabledOptions[option] = false
-		}
-	}
 }
