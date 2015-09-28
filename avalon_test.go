@@ -124,6 +124,53 @@ func TestNumGoods(t *testing.T) {
 	}
 }
 
+func TestNumEvilSpecials(t *testing.T) {
+	var tests = []struct {
+		options map[string]bool
+		want    int
+	}{
+		{
+			map[string]bool{},
+			0,
+		},
+		{
+			map[string]bool{"mordred": true},
+			1,
+		},
+		{
+			map[string]bool{"mordred": true, "morganapercival": true},
+			2,
+		},
+		{
+			map[string]bool{"mordred": false, "oberon": true},
+			1,
+		},
+		{
+			map[string]bool{"mordred": false, "morganapercival": true, "oberon": true},
+			2,
+		},
+		{
+			map[string]bool{"mordred": true, "morganapercival": true, "oberon": true},
+			3,
+		},
+		{
+			map[string]bool{"mordred": false, "morganapercival": true, "lake": true},
+			1,
+		},
+	}
+
+	for _, test := range tests {
+		avalon := NewAvalon()
+		avalon.EnabledOptions = test.options
+
+		n := avalon.NumEvilSpecials()
+
+		if n != test.want {
+			t.Errorf("wanted %d for options %v, got %d", test.want, test.options, n)
+		}
+	}
+}
+
 func TestPlayerExists(t *testing.T) {
 	var tests = []struct {
 		players []string
