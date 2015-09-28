@@ -87,6 +87,8 @@ func (ac *AvalonConfig) NumEvilSpecials() int {
 	return count
 }
 
+// IsValid verifies that the config is valid for the number of players
+// specified.
 func (ac *AvalonConfig) IsValid(numPlayers int) bool {
 	// No Lake until 7 players
 	if ac.IsOptionEnabled("lake") {

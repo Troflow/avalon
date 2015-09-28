@@ -25,6 +25,8 @@ var (
 // Avalon represents underlying game state and facilitates changes to the game
 // as it progresses and win conditions.
 type Avalon struct {
+	*AvalonConfig
+
 	// Players and their roles
 	Players  []string
 	Goods    []string
@@ -45,7 +47,8 @@ type Avalon struct {
 
 func NewAvalon() *Avalon {
 	av := &Avalon{
-		Specials: make(map[string]string),
+		AvalonConfig: NewAvalonConfig(),
+		Specials:     make(map[string]string),
 	}
 
 	return av
