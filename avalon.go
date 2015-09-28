@@ -69,12 +69,7 @@ func (av *Avalon) NumPlayers() int {
 // NumEvils returns the number of evil characters based on the total number of
 // players.
 func (av *Avalon) NumEvils() int {
-	numEvils, ok := numPlayersToNumEvils[av.NumPlayers()]
-	if !ok {
-		return 0
-	}
-
-	return numEvils
+	return NumEvils(av.NumPlayers())
 }
 
 // NumGoods returns the number of good characters based on the total number of

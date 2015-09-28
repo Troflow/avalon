@@ -32,3 +32,12 @@ func OptionsValid(av *Avalon) bool {
 
 	return true
 }
+
+func NumEvils(numPlayers int) int {
+	numEvils, ok := numPlayersToNumEvils[numPlayers]
+	if !ok {
+		return 0
+	}
+
+	return numEvils
+}
