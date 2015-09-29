@@ -6,7 +6,51 @@ import (
 	"testing"
 )
 
-func TestListOptionsEnabled(t *testing.T) {
+func TestIsOptionEnabled(t *testing.T) {
+	tests := []struct {
+		enabled map[string]bool
+		option  string
+		want    bool
+	}{
+		{
+			map[string]bool{},
+			"oberon",
+			false,
+		},
+		{
+			map[string]bool{"oberon": true},
+			"oberon",
+			true,
+		},
+		{
+			map[string]bool{"oberon": true},
+			"mordred",
+			false,
+		},
+		{
+			map[string]bool{"oberon": true, "mordred": true},
+			"mordred",
+			true,
+		},
+		{
+			map[string]bool{"oberon": true, "mordred": true},
+			"lake",
+			false,
+		},
+	}
+
+	for _, test := range tests {
+		config := NewAvalonConfig()
+		config.OptionsEnabled = test.enabled
+		res := config.IsOptionEnabled(test.option)
+
+		if res != test.want {
+			t.Errorf("expected %t, but got %t", test.want, res)
+		}
+	}
+}
+
+func TestListEnabledOptions(t *testing.T) {
 	tests := []struct {
 		options map[string]bool
 		wants   []string
@@ -23,10 +67,6 @@ func TestListOptionsEnabled(t *testing.T) {
 			map[string]bool{"mordred": true, "lake": true, "oberon": true},
 			[]string{"mordred", "lake", "oberon"},
 		},
-		{
-			map[string]bool{"mordred": true, "lake": true, "oberon": false},
-			[]string{"mordred", "lake"},
-		},
 	}
 
 	for _, test := range tests {
@@ -38,6 +78,44 @@ func TestListOptionsEnabled(t *testing.T) {
 			if !strings.Contains(res, want) {
 				t.Errorf("expected %s, but was absent from %s", want, res)
 			}
+		}
+	}
+}
+
+func TestEnableOption(t *testing.T) {
+	tests := []struct {
+		enabled map[string]bool
+		option  string
+		want    map[string]bool
+	}{
+		{
+			map[string]bool{},
+			"mordred",
+			map[string]bool{"mordred": true},
+		},
+		{
+			map[string]bool{"oberon": true},
+			"oberon",
+			map[string]bool{"oberon": true},
+		},
+		{
+			map[string]bool{"oberon": true},
+			"dingleberry",
+			map[string]bool{"oberon": true},
+		},
+		{
+			map[string]bool{"oberon": true},
+			"MoRdReD",
+			map[string]bool{"mordred": true, "oberon": true},
+		},
+	}
+
+	for _, test := range tests {
+		config := NewAvalonConfig()
+		config.OptionsEnabled = test.enabled
+		config.EnableOption(test.option)
+		if !reflect.DeepEqual(config.OptionsEnabled, test.want) {
+			t.Errorf("expected %v, got %v", test.want, config.OptionsEnabled)
 		}
 	}
 }
@@ -84,6 +162,44 @@ func TestEnableMany(t *testing.T) {
 		config := NewAvalonConfig()
 		config.OptionsEnabled = test.enabled
 		config.EnableMany(test.options)
+		if !reflect.DeepEqual(config.OptionsEnabled, test.want) {
+			t.Errorf("expected %v, got %v", test.want, config.OptionsEnabled)
+		}
+	}
+}
+
+func TestDisableOption(t *testing.T) {
+	tests := []struct {
+		enabled map[string]bool
+		option  string
+		want    map[string]bool
+	}{
+		{
+			map[string]bool{},
+			"mordred",
+			map[string]bool{},
+		},
+		{
+			map[string]bool{"mordred": true},
+			"oberon",
+			map[string]bool{"mordred": true},
+		},
+		{
+			map[string]bool{"lake": true, "mordred": true},
+			"dingleberry",
+			map[string]bool{"lake": true, "mordred": true},
+		},
+		{
+			map[string]bool{"oberon": true},
+			"OBerON",
+			map[string]bool{},
+		},
+	}
+
+	for _, test := range tests {
+		config := NewAvalonConfig()
+		config.OptionsEnabled = test.enabled
+		config.DisableOption(test.option)
 		if !reflect.DeepEqual(config.OptionsEnabled, test.want) {
 			t.Errorf("expected %v, got %v", test.want, config.OptionsEnabled)
 		}

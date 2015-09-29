@@ -33,6 +33,7 @@ func (ac *AvalonConfig) ListEnabledOptions() string {
 // EnableOption will enable any valid option, regardless of whether or not it
 // is already enabled.
 func (ac *AvalonConfig) EnableOption(option string) {
+	option = strings.ToLower(option)
 	if OptionExists(option) {
 		ac.OptionsEnabled[option] = true
 	}
@@ -41,7 +42,6 @@ func (ac *AvalonConfig) EnableOption(option string) {
 // EnableMany makes a best-effort attempt to enable every option requested.
 func (ac *AvalonConfig) EnableMany(options []string) {
 	for _, option := range options {
-		option := strings.ToLower(option)
 		ac.EnableOption(option)
 	}
 }
@@ -49,6 +49,8 @@ func (ac *AvalonConfig) EnableMany(options []string) {
 // DisableOption will disable any valid option, regardless of whether or not it
 // is already disabled.
 func (ac *AvalonConfig) DisableOption(option string) {
+	option = strings.ToLower(option)
+
 	if !ac.IsOptionEnabled(option) {
 		return
 	}
@@ -61,7 +63,6 @@ func (ac *AvalonConfig) DisableOption(option string) {
 // DisableMany makes a best-effort attempt to disable every option requested.
 func (ac *AvalonConfig) DisableMany(options []string) {
 	for _, option := range options {
-		option := strings.ToLower(option)
 		ac.DisableOption(option)
 	}
 }
