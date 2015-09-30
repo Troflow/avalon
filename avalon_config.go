@@ -1,6 +1,8 @@
 package avalon
 
 import (
+	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -90,25 +92,34 @@ func (ac *AvalonConfig) NumEvilSpecials() int {
 
 // IsValid verifies that the config is valid for the number of players
 // specified.
-func (ac *AvalonConfig) IsValid(numPlayers int) bool {
+func (ac *AvalonConfig) IsValid(numPlayers int) error {
+	var errorStrings []string
+
 	// No Lake until 7 players
 	if ac.IsOptionEnabled("lake") {
 		if numPlayers < 7 {
-			return false
+			errorStrings = append(errorStrings, "lake requires 7 players")
 		}
 	}
 
 	// No Oberon until 10 players
 	if ac.IsOptionEnabled("oberon") {
 		if numPlayers < 10 {
-			return false
+			errorStrings = append(errorStrings, "oberon requires 10 players")
 		}
 	}
 
 	// Keep at least one evil for Assassin
-	if ac.NumEvilSpecials() >= NumEvils(numPlayers) {
-		return false
+	numEvils := NumEvils(numPlayers)
+	numSpecials := ac.NumEvilSpecials()
+	if numSpecials >= numEvils {
+		n := numSpecials - numEvils + 1
+		errorStrings = append(errorStrings, fmt.Sprintf("you have %d too many evils", n))
 	}
 
-	return true
+	if len(errorStrings) > 0 {
+		return errors.New(strings.Join(errorStrings, "; "))
+	}
+
+	return nil
 }

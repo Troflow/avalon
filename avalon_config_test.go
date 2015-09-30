@@ -298,47 +298,62 @@ func TestIsValid(t *testing.T) {
 	var tests = []struct {
 		numPlayers int
 		options    map[string]bool
-		want       bool
+		wantErr    bool
+		want       string
 	}{
 		{
 			6,
 			map[string]bool{"lake": true},
-			false,
+			true,
+			"lake requires 7 players",
 		},
 		{
 			7,
 			map[string]bool{"lake": true},
-			true,
+			false,
+			"",
 		},
 		{
 			9,
 			map[string]bool{"oberon": true},
-			false,
+			true,
+			"oberon requires 10 players",
 		},
 		{
 			10,
 			map[string]bool{"oberon": true},
-			true,
+			false,
+			"",
 		},
 		{
 			6,
 			map[string]bool{"mordred": true, "morganapercival": true},
-			false,
+			true,
+			"you have 1 too many evils",
 		},
 		{
 			7,
 			map[string]bool{"mordred": true, "morganapercival": true},
-			true,
+			false,
+			"",
 		},
 		{
 			9,
 			map[string]bool{"mordred": true, "morganapercival": true},
-			true,
+			false,
+			"",
 		},
 		{
 			10,
 			map[string]bool{"mordred": true, "morganapercival": true, "oberon": true},
+			false,
+			"",
+		},
+		{
+			6,
+			map[string]bool{"lake": true, "mordred": true, "morganapercival": true, "oberon": true},
 			true,
+			"lake requires 7 players; oberon requires 10 players; you have 2 too many evils",
 		},
 	}
 
@@ -346,9 +361,26 @@ func TestIsValid(t *testing.T) {
 		config := NewAvalonConfig()
 		config.OptionsEnabled = test.options
 
-		res := config.IsValid(test.numPlayers)
-		if res != test.want {
-			t.Errorf("expected %t for %d players, options %v, got %t", test.want, test.numPlayers, test.options, res)
+		err := config.IsValid(test.numPlayers)
+
+		if err == nil {
+			if test.wantErr {
+				t.Errorf("expected error for %d players, options %v, but got none", test.numPlayers, test.options)
+			}
+			continue
+		}
+
+		// Didn't want an error, but got one
+		if err != nil && !test.wantErr {
+			t.Errorf("didn't want err, but got %v", err)
+			continue
+		}
+
+		// Did get error, did want one, possibly wrong error
+		s := err.Error()
+		if s != test.want {
+			t.Errorf("expected %s for %d players, options %v, but got %s",
+				test.want, test.numPlayers, test.options, s)
 		}
 	}
 }
