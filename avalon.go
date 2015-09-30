@@ -102,3 +102,9 @@ func (av *Avalon) AddPlayer(nick string) error {
 	av.Players = append(av.Players, nick)
 	return nil
 }
+
+// IsValid overrides the AvalonConfig IsValid and does not require a numPlayers
+// to be passed in.
+func (av *Avalon) IsValid() error {
+	return av.AvalonConfig.IsValid(av.NumPlayers())
+}
