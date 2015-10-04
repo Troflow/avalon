@@ -27,3 +27,19 @@ func FlavorTextForSpecial(special string) string {
 
 	return text
 }
+
+func remove(list []string, target string) {
+	for i, e := range list {
+		if e == target {
+			deleteAt(list, i)
+		}
+	}
+}
+
+func deleteAt(list []string, i int) {
+	if i == len(list) {
+		list = list[:i]
+	}
+
+	list = append(list[:i], list[i+1:]...)
+}

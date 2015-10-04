@@ -108,3 +108,16 @@ func (av *Avalon) AddPlayer(nick string) error {
 func (av *Avalon) IsValid() error {
 	return av.AvalonConfig.IsValid(av.NumPlayers())
 }
+
+func (av *Avalon) EvilsWithoutSpecial(special string) []string {
+	evils := make([]string, len(av.Evils))
+	copy(evils, av.Evils)
+
+	if !av.IsOptionEnabled(special) {
+		return evils
+	}
+
+	nick := av.Specials[special]
+	remove(evils, nick)
+	return evils
+}
