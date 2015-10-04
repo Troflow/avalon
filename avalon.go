@@ -108,11 +108,3 @@ func (av *Avalon) AddPlayer(nick string) error {
 func (av *Avalon) IsValid() error {
 	return av.AvalonConfig.IsValid(av.NumPlayers())
 }
-
-// AssignPlayers randomly assigns all players to their character roles:
-// * good/evil
-// * special characters like Merlin, Assassin, Percival
-// * Lady of the Lake
-func (av *Avalon) AssignPlayers() {
-	panic("uh")
-}
