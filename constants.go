@@ -19,6 +19,13 @@ var (
 		10: {3, 4, 4, 5, 5},
 	}
 
+	specialCharacterToFlavorText = map[string]string{
+		"mordred":  "You remain unknown to Merlin.",
+		"morgana":  "You appear as Merlin to Percival.",
+		"percival": "You see Merlin's identity, but Morgana attempts to trick you.",
+		"oberon":   "You are unknown to the other evils, nor do you know them.",
+	}
+
 	AvailableOptions   = []string{"lake", "mordred", "morganapercival", "oberon"}
 	SpecialEvilOptions = []string{"mordred", "morganapercival", "oberon"}
 )

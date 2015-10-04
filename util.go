@@ -18,3 +18,12 @@ func NumEvils(numPlayers int) int {
 
 	return numEvils
 }
+
+func FlavorTextForSpecial(special string) string {
+	text, ok := specialCharacterToFlavorText[special]
+	if !ok {
+		return ""
+	}
+
+	return text
+}
