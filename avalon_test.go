@@ -147,3 +147,62 @@ func TestAddPlayer(t *testing.T) {
 		t.Error("expected error, got no error")
 	}
 }
+
+func TestEvilsWithoutSpecial(t *testing.T) {
+	var tests = []struct {
+		evils    []string
+		specials map[string]string
+		enabled  map[string]bool
+		without  string
+		want     []string
+	}{
+		{
+			[]string{},
+			map[string]string{},
+			map[string]bool{},
+			"mordred",
+			[]string{},
+		},
+		{
+			[]string{"A"},
+			map[string]string{"mordred": "A"},
+			map[string]bool{"mordred": true},
+			"mordred",
+			[]string{},
+		},
+		{
+			[]string{"A", "B"},
+			map[string]string{"mordred": "A"},
+			map[string]bool{"mordred": true},
+			"mordred",
+			[]string{"B"},
+		},
+		{
+			[]string{"A", "B"},
+			map[string]string{"mordred": "A", "oberon": "B"},
+			map[string]bool{"mordred": true, "oberon": true},
+			"oberon",
+			[]string{"A"},
+		},
+		{
+			[]string{"A", "B"},
+			map[string]string{"mordred": "A", "oberon": "B"},
+			map[string]bool{"mordred": true, "oberon": true},
+			"morgana",
+			[]string{"A", "B"},
+		},
+	}
+
+	for _, test := range tests {
+		avalon := NewAvalon()
+		avalon.Evils = test.evils
+		avalon.Specials = test.specials
+		avalon.OptionsEnabled = test.enabled
+
+		list := avalon.EvilsWithoutSpecial(test.without)
+		if !setsEqual(list, test.want) {
+			t.Errorf("wanted %v, got %v", test.want, list)
+			t.Error(test)
+		}
+	}
+}

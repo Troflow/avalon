@@ -109,7 +109,10 @@ func (av *Avalon) IsValid() error {
 	return av.AvalonConfig.IsValid(av.NumPlayers())
 }
 
+// EvilsWithoutSpecial returns a list of the game's evils excluding the
+// player assigned to the specified special character.
 func (av *Avalon) EvilsWithoutSpecial(special string) []string {
+	// Make a copy of the evils list to return
 	evils := make([]string, len(av.Evils))
 	copy(evils, av.Evils)
 
@@ -118,6 +121,7 @@ func (av *Avalon) EvilsWithoutSpecial(special string) []string {
 	}
 
 	nick := av.Specials[special]
-	remove(evils, nick)
+	evils = remove(evils, nick)
+
 	return evils
 }
