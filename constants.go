@@ -20,10 +20,12 @@ var (
 	}
 
 	specialCharacterToFlavorText = map[string]string{
+		"assassin": "You are on the prowl for Merlin. If he reveals himself, you will kill him.",
+		"merlin":   "You see all evils except Mordred. You must keep yourself hidden from Assassin.",
 		"mordred":  "You remain unknown to Merlin.",
 		"morgana":  "You appear as Merlin to Percival.",
 		"percival": "You see Merlin's identity, but Morgana attempts to trick you.",
-		"oberon":   "You are unknown to the other evils, nor do you know them.",
+		"oberon":   "You are unknown to the other evils and you do not know them.",
 	}
 
 	AvailableOptions   = []string{"lake", "mordred", "morganapercival", "oberon"}
