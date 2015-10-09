@@ -11,12 +11,15 @@ type Assigner struct {
 	Avalon *Avalon
 }
 
+// NewAssigner creates a new Assigner for the given Avalon game.
 func NewAssigner(avalon *Avalon) *Assigner {
 	return &Assigner{
 		Avalon: avalon,
 	}
 }
 
+// Assign should be called directly after creating a new Assigner. It populates
+// the member Avalon game directly with the assignments.
 func (ass *Assigner) Assign() {
 	ass.assignGoodEvil()
 	ass.assignSpecials()

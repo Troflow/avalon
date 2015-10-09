@@ -28,10 +28,11 @@ var (
 		"oberon":   "You are unknown to the other evils and you do not know them.",
 	}
 
-	AvailableOptions   = []string{"lake", "mordred", "morganapercival", "oberon"}
-	SpecialEvilOptions = []string{"mordred", "morganapercival", "oberon"}
+	availableOptions   = []string{"lake", "mordred", "morganapercival", "oberon"}
+	specialEvilOptions = []string{"mordred", "morganapercival", "oberon"}
 )
 
 const (
+	// MinPlayers is the minimum number of players required to start a game.
 	MinPlayers = 5
 )

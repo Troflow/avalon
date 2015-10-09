@@ -7,7 +7,12 @@ import (
 )
 
 var (
-	ErrPlayerExists   = errors.New("avalon: player is already in this game")
+	// ErrPlayerExists indicates that player trying to join is already in
+	// the game.
+	ErrPlayerExists = errors.New("avalon: player is already in this game")
+
+	// ErrTooManyPlayers indiciates that a player is trying to join when
+	// there are already 10 players.
 	ErrTooManyPlayers = errors.New("avalon: there are already 10 players")
 )
 
@@ -45,6 +50,7 @@ type Avalon struct {
 	PastQuestParties []string
 }
 
+// NewAvalon sets up a new Avalon game with no config options enabled.
 func NewAvalon() *Avalon {
 	av := &Avalon{
 		AvalonConfig: NewAvalonConfig(),
@@ -62,7 +68,7 @@ func (av *Avalon) NumPlayers() int {
 // NumEvils returns the number of evil characters based on the total number of
 // players.
 func (av *Avalon) NumEvils() int {
-	return NumEvils(av.NumPlayers())
+	return numEvils(av.NumPlayers())
 }
 
 // NumGoods returns the number of good characters based on the total number of

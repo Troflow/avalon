@@ -6,10 +6,13 @@ import (
 	"strings"
 )
 
+// AvalonConfig is a wrapper for the options specified for an Avalon game and
+// handles enabling/disabling and validating the config.
 type AvalonConfig struct {
 	OptionsEnabled map[string]bool
 }
 
+// NewAvalonConfig returns a fresh Config with no options enabled.
 func NewAvalonConfig() *AvalonConfig {
 	return &AvalonConfig{
 		OptionsEnabled: make(map[string]bool),
@@ -81,7 +84,7 @@ func (ac *AvalonConfig) allEnabledOptions() []string {
 // NumEvilSpecials returns the number of special evil characters enabled.
 func (ac *AvalonConfig) NumEvilSpecials() int {
 	var count int
-	for _, option := range SpecialEvilOptions {
+	for _, option := range specialEvilOptions {
 		if ac.IsOptionEnabled(option) {
 			count++
 		}
@@ -110,7 +113,7 @@ func (ac *AvalonConfig) IsValid(numPlayers int) error {
 	}
 
 	// Keep at least one evil for Assassin
-	numEvils := NumEvils(numPlayers)
+	numEvils := numEvils(numPlayers)
 	numSpecials := ac.NumEvilSpecials()
 	if numSpecials >= numEvils {
 		n := numSpecials - numEvils + 1

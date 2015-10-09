@@ -1,7 +1,9 @@
 package avalon
 
+// OptionExists returns whether a given string refers to an option that exists
+// and therefore can be enabled/disabled.
 func OptionExists(target string) bool {
-	for _, option := range AvailableOptions {
+	for _, option := range availableOptions {
 		if target == option {
 			return true
 		}
@@ -10,15 +12,8 @@ func OptionExists(target string) bool {
 	return false
 }
 
-func NumEvils(numPlayers int) int {
-	numEvils, ok := numPlayersToNumEvils[numPlayers]
-	if !ok {
-		return 0
-	}
-
-	return numEvils
-}
-
+// FlavorTextForSpecial returns the flavor text for the specified special
+// character or "" if the character has no flavor text.
 func FlavorTextForSpecial(special string) string {
 	text, ok := specialCharacterToFlavorText[special]
 	if !ok {
@@ -26,6 +21,15 @@ func FlavorTextForSpecial(special string) string {
 	}
 
 	return text
+}
+
+func numEvils(numPlayers int) int {
+	numEvils, ok := numPlayersToNumEvils[numPlayers]
+	if !ok {
+		return 0
+	}
+
+	return numEvils
 }
 
 func remove(list []string, target string) []string {
